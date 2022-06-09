@@ -261,6 +261,16 @@ const getBitacora = async ( req, res ) => {
 
 
 
+//********************************************************************************/
+//********************************************************************************/
+//********************************************************************************/
+//********************************************************************************/
+//********************************************************************************/
+//********************************************************************************/
+//********************************************************************************/
+//********************************************************************************/
+//********************************************************************************/
+
 
 const getScores = async ( req, res ) => {
 
@@ -272,16 +282,20 @@ const getScores = async ( req, res ) => {
 
 
         const [bitacora, totalResults] = await Promise.all([
-            Service.find({ status: 'finalized' }, 'report comment points')
-            .populate('comment')
-            .populate('points')
-            .populate({path: 'report', populate: {path: 'department', populate:{path: 'name'}}})
+            Service.find({ status: 'finalized' }, "isRanked comment score points")
+   //         .select(["comment", "score", "points", "report"])
+            //  .populate('comment')
+             .populate({path: 'report', 
+                select: 'department',
+                populate: {path: 'department', select: 'name'}
+            })
             
                 .skip((page - 1 )*20)
                 .limit(20),  
             Service.countDocuments({ status: 'finalized' })
         ]);
 
+        
 
         res.status(200).json({
             status: true,
