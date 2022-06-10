@@ -24,7 +24,7 @@ const UserSchema = Schema({
     },
     image: {
         type: String,
-        default: 'https://icon-library.com/images/no-user-image-icon/no-user-image-icon-3.jpg' 
+        default: 'no-image.jpg' 
     },
     role: {
         type: String,

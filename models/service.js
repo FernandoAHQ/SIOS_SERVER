@@ -39,6 +39,11 @@ const ServiceSchema = Schema({
     feedback: {
         type: String
     },
+    evidenceImage: {
+        type: String,
+        default: 'no-image.jpg' 
+
+    },    
     description: {
         type: String
     },

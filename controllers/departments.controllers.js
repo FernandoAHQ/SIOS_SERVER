@@ -30,7 +30,7 @@ const getAll = async(req, res = response ) => {
 
 
 const create = async(req, res = response ) => {
-
+console.log("TRYING TO CREATE");
     try {
 
         const { user } = req.body
@@ -39,6 +39,8 @@ const create = async(req, res = response ) => {
         const userdb = await User.findById( user )
 
         if ( userdb.role != 'USER_ROLE' ) {
+            
+        console.log("NOT A USER");
             return res.status(400).json({
                 status: false,
                 message: `No se puede asignar un usuario tipo ${ userdb.role } a un departamento.`,
@@ -49,18 +51,21 @@ const create = async(req, res = response ) => {
         const departmentExist = await Department.findOne({ user }).populate('user');
 
         if ( departmentExist ) {
+            
+        console.log("DEPARTMENT ALREADY EXISTS");
             return res.status(400).json({
                 status: false,
                 message: 'Ya existe un departamento asignado a ese usuario',
             })
         }
 
+        console.log("DEPARTMENT CREATING");
 
         const department = new Department( req.body );
 
         await department.save();
 
-
+        console.log("DEPARTMENT CREATED");
         res.status(201).json({
             status: true,
             message: 'Departamento creado con éxito',

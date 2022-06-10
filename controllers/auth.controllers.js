@@ -52,13 +52,13 @@ const register = async(req, res = response ) => {
         const accessToken = await generarJWT(savedUser.id, savedUser.role);
 
 
-        if(user.role == 'SITE_ROLE'){
-            Periodo.findOne({isActive: true})
-            .ranking.push({
-                user: user,
-                points: 0
-            })
-        }
+        // if(user.role == 'SITE_ROLE'){
+        //     Periodo.findOne({isActive: true})
+        //     .ranking.push({
+        //         user: user,
+        //         points: 0
+        //     })
+        // }
 
 
 
@@ -86,10 +86,14 @@ const login = async(req, res = response) => {
 
     const { username, password } = req.body;
 
+
+
     try {
+
 
         const user = await User.findOne({ username })
 
+        console.log(user);
 
         if (!user) {
             return res.status(404).json({
@@ -101,6 +105,7 @@ const login = async(req, res = response) => {
 
         const validarPassword = bcrypt.compareSync( password, user.password)
 
+    //    console.log(bcrypt.genSaltSync(""));
 
         if (!validarPassword) {
             return res.status(404).json({
@@ -151,6 +156,8 @@ const renewJWT = async(req, res = response) => {
     const role = req.role
     const accessToken = await generarJWT(id, role)
     const user = await User.findById(id)
+
+    console.log("ID: " + id);
 
 
     let deptartament;

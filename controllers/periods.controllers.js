@@ -54,7 +54,7 @@ const getPeriodo = async (req, res) => {
 
 
         //const p = periodo[0];
-        periodo.ranking.sort((a, b) => (a.points > b.points) ? 1 : -1);
+        periodo.ranking.sort((a, b) => (a.points < b.points) ? 1 : -1);
 
 
     //  console.log(periodo);
