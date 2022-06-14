@@ -20,7 +20,7 @@ const PeriodSchema = Schema({
     },
     isActive: {
         type: Boolean,
-        default: false
+        default: true
     },
 
     ranking: {

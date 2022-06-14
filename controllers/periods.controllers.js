@@ -115,30 +115,35 @@ const create = async(req, res = response ) => {
 
     try {
 
+        const periodoAntiguo = await Period.findOne({isActive: true});
+        
+        if(periodoAntiguo){
+            periodoAntiguo.isActive = false;
+            await periodoAntiguo.save();
+        }
 
         const period = new Period( req.body );
 
-        period.ranking = [];
+        periodoNuevo.ranking = [];
 
         const [users] = await Promise.all([
             User.find({ role: 'SITE_ROLE', isActive: true}),            
         ]);
         
         users.forEach(user => {
-            period.ranking.push({
+            periodoNuevo.ranking.push({
                 user: user,
                 points: 0
             });
         });
 
-        const [periods] = await Promise.all([
-            Period.find({ isActive: true }),            
-        ]);
+     
 
 
-        periods.forEach(per => per.isActive = false);
+        
 
-        period.isActive = true;
+
+      //  period.isActive = true;
 
        
      

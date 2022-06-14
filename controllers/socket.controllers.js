@@ -202,31 +202,47 @@ const calificarService = async( payload ) => {
 
 
         const { service, grade } = payload;
-
+        console.log("grade: " + grade.dificulty + " / " + grade.quality)
         const points = grade.dificulty * grade.quality;
         
         const period = await Period.findOne({isActive: true});
-        
-        period.ranking.forEach(element => {
-            if(element.user == service.assignedTo._id){
-                element.user.points += points;
-                console.log("Assigned " + points + " to user id: " + service.assignedTo._id);
-            }
-        });
 
+       
+        console.log("SERVICE FOUND");
+        
+  
      
 
         const id = mongoose.Types.ObjectId(service);
 
         const servicedb = await Services.findById( id );
+        const reportdb = await Report.findById( servicedb.report );
 
 
+        if(!reportdb){
+            console.log("REPORT NOT FOUND");
+        }
 
 
 
         if ( !servicedb) {
             return { message: `No existe un servicio con el ID ${ id }` }
         }
+
+        if(!period){
+            console.log("PERIOD NOT FOUND");
+        }
+
+
+        period.ranking.forEach(element => {
+            if(element.user._id.equals(servicedb.assignedTo._id)){
+     //       if(mongoose.Types.ObjectId(element.user._id) == mongoose.Types.ObjectId(servicedb.assignedTo._id)){
+                element.points += points;
+                console.log("Assigned " + points + " to user id: " + servicedb.assignedTo._id  );
+                
+            } 
+        });
+ 
 
         servicedb.points = points;
         servicedb.isRanked = true;

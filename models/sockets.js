@@ -5,6 +5,7 @@ const { saveReport,
     userDisconnected, 
     editReport, 
     calificarService, 
+    calificarReport, 
     getAllServices, 
     assignService, 
     finalizedService, 
@@ -158,12 +159,13 @@ class Sockets {
 
 
             socket.on('calificar-service', async ( payload ) => {
-                // console.log(payload)
+                 console.log("CALIFICAR: " + payload.service)
                 
                 // Guardar reporte en la base de datos
                 const service = await calificarService( payload );
-          
-                this.io.to( payload.to ).emit('services-all', await getAllServices() )
+                
+                console.log("SENDING TO "+ payload.from);
+                this.io.to( payload.from ).emit('services-all', await getAllServices() )
 
                 // Emitir al user site la lista
                 this.io.to( payload.from ).emit('services-list', await getAllServicesByUserId( payload.from ) )
