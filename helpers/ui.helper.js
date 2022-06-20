@@ -22,7 +22,7 @@ const getMenuFrontEnd = ( role = 'user_role' ) => {
             { titulo: 'Servicios', icono: 'fas fa-user-alt mr-2', url: 'servicios' },
             { titulo: 'Bitacora', icono: 'fas fa-user-alt mr-2', url: 'bitacora' },
          //   { titulo: 'Ordenes',     icono: 'fas fa-newspaper mr-2', url: 'ordenes' },
-         //   { titulo: 'Inventario',  icono: 'fas fa-newspaper mr-2', url: 'inventario' },
+            { titulo: 'Inventario',  icono: 'fas fa-newspaper mr-2', url: 'inventario' },
             { titulo: 'Usuarios', icono: 'fa-solid fa-users', url: 'usuarios' },
             { titulo: 'Departamentos', icono: 'fa-solid fa-users', url: 'departamentos' },
             { titulo: 'Ranking', icono: 'fa-solid fa-users', url: 'ranking' },

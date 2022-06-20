@@ -46,6 +46,7 @@ class Server {
         this.app.use( '/api/test', require('../routes/test.routes') );
         this.app.use( '/api/upload', require('../routes/uploads.routes') );
         this.app.use( '/api/images', require('../routes/images.routes') );
+        this.app.use( '/api/inventory', require('../routes/inventory.routes') );
     }
 
 
