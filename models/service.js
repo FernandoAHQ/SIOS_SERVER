@@ -8,8 +8,9 @@ const Period = require('../models/period');
 const ServiceSchema = Schema({
 
     period: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Period'
+     //   required: true
     },
 
     report: {

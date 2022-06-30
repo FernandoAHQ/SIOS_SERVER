@@ -1,6 +1,9 @@
 const {response} = require("express");
 const Department = require("../models/department");
 const Computer = require("../models/computer");
+const Switch = require("../models/switch");
+const Vlan = require("../models/vlan");
+const Camera = require("../models/camera");
 
 const create = async (req, res = response) => {
 
@@ -59,6 +62,123 @@ const create = async (req, res = response) => {
                 break;
             }
 
+            case 'switches':{
+
+                
+                try {
+                     
+
+                     const swdb = await Switch.findOne({name: req.body.name})
+ 
+
+                    if(swdb){
+                        return res.status(400).json({
+                            status: false,
+                            message: `Ya existe el switch con el id: ${ req.body.name }.`,
+                        })
+                    }
+
+                        const newSwitch = new Switch(req.body);
+                        
+                        await newSwitch.save();
+                      
+                        res.status(201).json({
+                            status: true,
+                            message: 'Switch registrada con éxito',
+                            newSwitch
+                        })
+                    
+
+                    
+                } catch (error) {
+                    console.log(error);
+                    res.status(500).json({
+                        status: false,
+                        message: 'Hable con el administrador'
+                    })
+                }
+
+            break;
+            }
+
+            case 'vlans':{
+
+                
+                try {
+
+                     const vlandb = await Vlan.findOne({vlan: req.body.vlan})
+
+
+                     if(vlandb){
+                        return res.status(400).json({
+                            status: false,
+                            message: `Ya existe la VLAN con el id: ${ req.body.name }.`,
+                        })
+                    }
+ 
+
+                        const newVlan = new Vlan(req.body);
+                    
+                        await newVlan.save();
+                      
+                        res.status(201).json({
+                            status: true,
+                            message: 'VLAN registrada con éxito',
+                            newVlan
+                        })
+                    
+
+                    
+                } catch (error) {
+                    console.log(error);
+                    res.status(500).json({
+                        status: false,
+                        message: 'Hable con el administrador'
+                    })
+                }
+
+            break;
+            }
+            
+            case 'cameras':{
+
+                
+                try {
+
+                     const camdb = await Camera.findOne({tag: req.body.tag})
+
+
+                     if(camdb){
+                        return res.status(400).json({
+                            status: false,
+                            message: `Ya existe la camara con la etiqueta: ${ req.body.tag }.`,
+                        })
+                    }
+ 
+
+                        const newCam = new Camera(req.body);
+                    
+                        await newCam.save();
+                      
+                        res.status(201).json({
+                            status: true,
+                            message: 'Camara registrada con éxito',
+                            newCam
+                        })
+                    
+
+                    
+                } catch (error) {
+                    console.log(error);
+                    res.status(500).json({
+                        status: false,
+                        message: 'Hable con el administrador'
+                    })
+                }
+
+            break;
+            }
+            
 
             default:{
                 return res.status(400).json({
@@ -78,45 +198,149 @@ const getAll = async (req, res = response) => {
 
 
         switch(category){
+
+
             case 'computers':{
+                            
+                const page = Number(req.query.page) || 1;
+
+                try {
+            
+            
+                    const [computers, totalResults] = await Promise.all([
+                        Computer.find()
+                            .skip((page - 1 )*20)
+                            .limit(20)
+                            .populate('department')
+                            .populate('encargado'),  
+                            Computer.countDocuments()
+                    ]);
+            
+            
+                    res.status(200).json({
+                        status: true,
+                        computers,
+                        totalResults
+                    })
+            
+                
 
                 
-                                
-                                        const page = Number(req.query.page) || 1;
-
-
-                                        try {
-                                    
-                                    
-                                            const [computers, totalResults] = await Promise.all([
-                                                Computer.find()
-                                                    .skip((page - 1 )*20)
-                                                    .limit(20)
-                                                    .populate('department')
-                                                    .populate('encargado'),  
-                                                    Computer.countDocuments()
-                                            ]);
-                                    
-                                    
-                                            res.status(200).json({
-                                                status: true,
-                                                computers,
-                                                totalResults
-                                            })
-                                    
-                                        
-
-                                        
-                                    } catch (error) {
-                                        console.log(error);
-                                        res.status(500).json({
-                                            status: false,
-                                            message: 'Hable con el administrador'
-                                        })
-                                    }
-
-                break;
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    status: false,
+                    message: 'Hable con el administrador'
+                })
             }
+
+        break;
+        }
+
+        case 'switches':{
+                            
+            const page = Number(req.query.page) || 1;
+
+            try {
+        
+        
+                const [switches, totalResults] = await Promise.all([
+                    Switch.find()
+                        .skip((page - 1 )*20)
+                        .limit(20),
+                        Switch.countDocuments()
+                ]);
+        
+        
+                res.status(200).json({
+                    status: true,
+                    switches,
+                    totalResults
+                })
+        
+            
+
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                status: false,
+                message: 'Hable con el administrador'
+            })
+        }
+
+        break;
+        }
+
+        case 'vlans':{
+                            
+            const page = Number(req.query.page) || 1;
+
+            try {
+        
+        
+                const [vlans, totalResults] = await Promise.all([
+                    Vlan.find()
+                        .skip((page - 1 )*20)
+                        .limit(20),
+                        Vlan.countDocuments()
+                ]);
+        
+        
+                res.status(200).json({
+                    status: true,
+                    vlans,
+                    totalResults
+                })
+        
+            
+
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                status: false,
+                message: 'Hable con el administrador'
+            })
+        }
+
+        break;
+        }
+
+        case 'cameras':{
+                            
+            const page = Number(req.query.page) || 1;
+
+            try {
+        
+        
+                const [camaras, totalResults] = await Promise.all([
+                    Camera.find()
+                        .skip((page - 1 )*20)
+                        .limit(20),
+                        Camera.countDocuments()
+                ]);
+        
+        
+                res.status(200).json({
+                    status: true,
+                    camaras,
+                    totalResults
+                })
+        
+            
+
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                status: false,
+                message: 'Hable con el administrador'
+            })
+        }
+
+        break;
+        }
 
 
             default:{

@@ -7,7 +7,7 @@ const router = Router();
 router.get('/:category', //[ validarJWT, validarADMIN_ROLE], 
 getAll );
 
-router.post('/:category/register', [ validarJWT, validarADMIN_ROLE ], 
+router.post('/:category/register', //[ validarJWT, validarADMIN_ROLE ], 
 create);
 
 
