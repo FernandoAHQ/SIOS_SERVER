@@ -4,6 +4,7 @@ const Computer = require("../models/computer");
 const Switch = require("../models/switch");
 const Vlan = require("../models/vlan");
 const Camera = require("../models/camera");
+const AP = require("../models/ap");
 
 const create = async (req, res = response) => {
 
@@ -178,7 +179,43 @@ const create = async (req, res = response) => {
 
             break;
             }
-            
+            case 'ap':{
+
+                
+                try {
+                    
+                    const apdb = await AP.findOne({serie: req.body.serie})
+
+
+                    if(apdb){
+                        return res.status(400).json({
+                            status: false,
+                            message: `Ya existe un AP con el numero de serie: ${ req.body.serie }.`,
+                        })
+                    }
+
+                        const newAp = new AP(req.body);
+                       
+                        await newAp.save();
+                      
+                        res.status(201).json({
+                            status: true,
+                            message: 'Computadora registrada con éxito',
+                            newAp
+                        })
+                    
+
+                    
+                } catch (error) {
+                    console.log(error);
+                    res.status(500).json({
+                        status: false,
+                        message: 'Hable con el administrador'
+                    })
+                }
+
+            break;
+            }
 
             default:{
                 return res.status(400).json({
@@ -212,7 +249,12 @@ const getAll = async (req, res = response) => {
                             .skip((page - 1 )*20)
                             .limit(20)
                             .populate('department')
-                            .populate('encargado'),  
+                            .populate({
+                                path: 'department',
+                                populate: {
+                                    path: 'user'
+                                }
+                            }),  
                             Computer.countDocuments()
                     ]);
             
@@ -341,6 +383,43 @@ const getAll = async (req, res = response) => {
 
         break;
         }
+        case 'ap':{
+
+                
+                                
+            const page = Number(req.query.page) || 1;
+
+
+            try {
+        
+        
+                const [aps, totalResults] = await Promise.all([
+                    AP.find()
+                        .skip((page - 1 )*20)
+                        .limit(20),  
+                        AP.countDocuments()
+                ]);
+        
+        
+                res.status(200).json({
+                    status: true,
+                    aps,
+                    totalResults
+                })
+        
+            
+
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                status: false,
+                message: 'Hable con el administrador'
+            })
+        }
+
+        break;
+        }
 
 
             default:{
@@ -355,9 +434,60 @@ const getAll = async (req, res = response) => {
 
 }
 
+const edit = async (req, res = response) => {
+
+
+    var category = req.params.category;
+
+
+    switch(category){
+        case 'computers':{
+            try {
+
+
+                if(Computer.findById(req.body.id)){
+                    const pcdb = await Computer.findByIdAndUpdate(req.body.id, req.body, {new: true});//({serie: req.body.id})
+                    console.log(pcdb);
+                    /// await pcdb.save();
+    
+                    res.status(201).json({
+                        status: true,
+                        message: 'Computadora actualizada con éxito',
+                        pcdb
+                    })
+                }else{
+                    return res.status(400).json({
+                        status: false,
+                        message: `No existe la computadora con id: ${ req.body.id }.`,
+                    })
+                }
+        
+                  
+
+                
+        
+                
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    status: false,
+                    message: 'Hable con el administrador'
+                })
+            }
+
+        }
+
+    }
+
+   
+
+
+}
+
 
 
 module.exports = {
     create,
-    getAll
+    getAll,
+    edit
 }

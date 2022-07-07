@@ -20,11 +20,6 @@ const ComputerSchema = Schema({
         type: String,
      //   required: true
     },
-    encargado: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
     status: {
         type: String,
         default: "Active"
