@@ -179,7 +179,7 @@ const create = async (req, res = response) => {
 
             break;
             }
-            case 'ap':{
+            case 'aps':{
 
                 
                 try {
@@ -200,7 +200,7 @@ const create = async (req, res = response) => {
                       
                         res.status(201).json({
                             status: true,
-                            message: 'Computadora registrada con éxito',
+                            message: 'Access Point registrada con éxito',
                             newAp
                         })
                     
@@ -383,7 +383,7 @@ const getAll = async (req, res = response) => {
 
         break;
         }
-        case 'ap':{
+        case 'aps':{
 
                 
                                 
@@ -453,7 +453,7 @@ const edit = async (req, res = response) => {
                     res.status(201).json({
                         status: true,
                         message: 'Computadora actualizada con éxito',
-                        pcdb
+                        computadora: pcdb
                     })
                 }else{
                     return res.status(400).json({
@@ -474,7 +474,111 @@ const edit = async (req, res = response) => {
                     message: 'Hable con el administrador'
                 })
             }
+            break;
+        }        case 'vlans':{
+            try {
 
+
+                if(Vlan.findById(req.body.id)){
+                    const pcdb = await Vlan.findByIdAndUpdate(req.body.id, req.body, {new: true});//({serie: req.body.id})
+                    console.log(pcdb);
+                    /// await pcdb.save();
+    
+                    res.status(201).json({
+                        status: true,
+                        message: 'VLAN actualizada con éxito',
+                        vlan: pcdb
+                    })
+                }else{
+                    return res.status(400).json({
+                        status: false,
+                        message: `No existe la VLAN con id: ${ req.body.id }.`,
+                    })
+                }
+        
+                  
+
+                
+        
+                
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    status: false,
+                    message: 'Hable con el administrador'
+                })
+            }
+            break;
+
+        }        case 'switches':{
+            try {
+
+
+                if(Switch.findById(req.body.id)){
+                    const pcdb = await Switch.findByIdAndUpdate(req.body.id, req.body, {new: true}); //({serie: req.body.id})
+                    console.log(pcdb);
+                    /// await pcdb.save();
+    
+                    res.status(201).json({
+                        status: true,
+                        message: 'Switch actualizada con éxito',
+                        switch: pcdb
+                    })
+                }else{
+                    return res.status(400).json({
+                        status: false,
+                        message: `No existe el Switch con id: ${ req.body.id }.`,
+                    })
+                }
+        
+                  
+
+                
+        
+                
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    status: false,
+                    message: 'Hable con el administrador'
+                })
+            }
+            break;
+
+        }        case 'aps':{
+            try {
+
+
+                if(AP.findById(req.body.id)){
+                    const pcdb = await AP.findByIdAndUpdate(req.body.id, req.body, {new: true});//({serie: req.body.id})
+                    console.log(pcdb);
+                    /// await pcdb.save();
+    
+                    res.status(201).json({
+                        status: true,
+                        message: 'Access Point actualizada con éxito',
+                        ap: pcdb
+                    })
+                }else{
+                    return res.status(400).json({
+                        status: false,
+                        message: `No existe el AP con id: ${ req.body.id }.`,
+                    })
+                }
+        
+                  
+
+                
+        
+                
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({
+                    status: false,
+                    message: 'Hable con el administrador'
+                })
+            }
+            break;
         }
 
     }
