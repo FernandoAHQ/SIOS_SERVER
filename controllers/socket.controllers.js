@@ -4,6 +4,7 @@ const Department = require('../models/department');
 const Report = require('../models/report');
 const Services = require('../models/service');
 const Period = require('../models/period');
+const TaskRegister = require('../models/taskRegister');
 
 const today = moment().startOf('day')
 
@@ -404,6 +405,46 @@ const initService = async ( payload ) => {
 
 }
 
+
+
+const finishTask = async ( payload ) => {
+    /**
+     *
+     * 
+     * from : id site
+     * to: id user depto
+     * service: id service
+     */
+
+    console.log('TASK FINISHED!!!')
+    console.log({payload})
+
+
+
+        const data = {
+            task: payload.task._id,
+            observation: payload.task.observation,
+            solution: payload.task.solution,
+            severity: payload.task.severity,
+            user: payload.from
+        }
+
+    const task = new TaskRegister(data)
+
+    await task.save();
+
+    console.log(task)
+ //   const id = mongoose.Types.ObjectId( payload.service );
+
+   // const service = await Services.findById( id );
+
+    //service.status = 'in-progress';
+
+    //await service.save();
+
+
+}
+
 module.exports = {
     userConnected,
     userDisconnected,
@@ -418,5 +459,6 @@ module.exports = {
     assignService,
     finalizedService,
     getAdminRole,
-    initService
+    initService,
+    finishTask
 }

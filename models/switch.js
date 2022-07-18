@@ -11,9 +11,7 @@ const SwitchSchema = new Schema(
             type: String,
             required: true
         },
-        user:{
-            type: String,
-         },
+
         ip:{
             type: String,
             required: true

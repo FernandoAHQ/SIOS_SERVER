@@ -10,7 +10,8 @@ const { saveReport,
     assignService, 
     finalizedService, 
     getAdminRole, 
-    initService } = require("../controllers/socket.controllers");
+    initService,
+    finishTask } = require("../controllers/socket.controllers");
 const { comprobarJWT } = require("../helpers/jwt.helper");
 
 
@@ -194,6 +195,27 @@ class Sockets {
 
                 // Emitir al usuario depto sus reportes
                 this.io.to( payload.service.user  ).emit('reports-list', await getAllReportsByUserId( payload.service.user ) )
+
+             
+            })
+
+            socket.on('finish-task', async ( payload ) => {
+                console.log(payload);
+
+                await finishTask(payload);
+                
+                // Guardar reporte en la base de datos
+               // const service = await finalizedService( payload );
+            
+                // Emitir listados
+                //devolver al admin el listado
+             //  this.io.to( payload.to ).emit('services-all', await getAllServices() )
+
+                // Emitir al user site la lista
+          //        this.io.to( payload.from ).emit('services-list', await getAllServicesByUserId( payload.from ) )
+
+                // Emitir al usuario depto sus reportes
+              //  this.io.to( payload.service.user  ).emit('reports-list', await getAllReportsByUserId( payload.service.user ) )
 
              
             })

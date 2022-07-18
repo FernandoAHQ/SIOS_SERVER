@@ -62,6 +62,50 @@ const create = async (req, res = response) => {
 
 }
 
+const assign = async (req, res = response) => {
+
+    try {
+      
+     
+
+            const task = Task.findById(req.body.id);
+
+            if(task){
+
+                task.
+
+                res.status(201).json({
+                    status: true,
+                    message: 'Tarea asignada con éxito',
+                    task
+                })
+            
+            }else{
+                res.status(404).json({
+                    status: false,
+                    message: 'La tarea no especificada no existe',
+                    task
+                })
+            }
+
+            //  const newTask = new Task(req.body);
+
+            //  await newTask.save();
+          
+
+
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: false,
+            message: 'Hable con el administrador'
+        })
+    }
+   
+
+}
+
 
 const getAll = async (req, res = response) => {
 
@@ -99,11 +143,54 @@ const getAll = async (req, res = response) => {
    
 
 } 
+const getAllRegistered = async (req, res = response) => {
+
+    const page = Number(req.query.page) || 1;
+
+    try {
+    
+
+        const [registros, totalResults] = await Promise.all([
+            TaskRegister.find()
+            .populate({path: 'task', 
+            select: 'name',
+            })
+            .populate({path: 'user', 
+            select: 'name',
+            })
+                .skip((page - 1 )*20)
+                .limit(20),  
+                Task.countDocuments()
+        ]);
+
+
+        res.status(200).json({
+            status: true,
+            registros,
+            totalResults
+        })
+
+    
+
+    
+} catch (error) {
+    console.log(error);
+    res.status(500).json({
+        status: false,
+        message: 'Hable con el administrador'
+    })
+}
+
+   
+
+} 
 
 
 
 module.exports = {
     create,
     getAll,
-    registerTask
+    registerTask,
+    assign,
+    getAllRegistered
 }

@@ -270,6 +270,7 @@ const getBitacora = async ( req, res ) => {
 //********************************************************************************/
 //********************************************************************************/
 //********************************************************************************/
+ 
 
 
 const getScores = async ( req, res ) => {
@@ -332,8 +333,9 @@ const getScoresById = async ( req, res ) => {
             populate: {path: 'department', select: 'name'}
 
         }),
-            Service.countDocuments({ status: 'finalized'  })
+            Service.countDocuments({ status: 'finalized'})
         ]);
+
 
 
         res.status(200).json({
