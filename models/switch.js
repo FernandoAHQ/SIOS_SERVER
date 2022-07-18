@@ -44,16 +44,16 @@ const SwitchSchema = new Schema(
             required: true
         },
         ethernetPorts:{
-            type: [Number],
+            type: String,
         },
         gigabitPorts:{
-            type: [Number],
+            type: String,
         },
         sfpPorts:{
-            type: [Number],
+            type: String,
         },
         poePorts:{
-            type: [Number],
+            type: String,
         },
         console:{
             type: Boolean
