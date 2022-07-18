@@ -326,16 +326,19 @@ const getScoresById = async ( req, res ) => {
 
 
         const [bitacora, totalResults] = await Promise.all([
-            Service.find({ status: 'finalized', assignedTo: req.params.id }, 'score comment points')
-                .skip((page - 1 )*20)
-                .limit(20),  
+            Service.find({ status: 'finalized', assignedTo: req.params.id }, 'score comment points report')
+            .populate({path: 'report', 
+            select: 'title department',
+            populate: {path: 'department', select: 'name'}
+
+        }),
             Service.countDocuments({ status: 'finalized'  })
         ]);
 
 
         res.status(200).json({
             status: true,
-            bitacora,
+            calificaciones: bitacora,
             totalResults
         })
 
