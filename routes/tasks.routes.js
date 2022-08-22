@@ -17,8 +17,8 @@ router.post('/logTask', //[ validarJWT, validarADMIN_ROLE ],
 registerTask);
 
 
-// router.post('/assign', //[ validarJWT, validarADMIN_ROLE ], 
-// assign);
+ router.post('/assign', //[ validarJWT, validarADMIN_ROLE ], 
+ assign);
 
 
 module.exports = router;

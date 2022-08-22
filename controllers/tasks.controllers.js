@@ -1,5 +1,6 @@
 const {response} = require("express");
 const Task = require("../models/task");
+const User = require("../models/user");
 const TaskRegister = require("../models/taskRegister");
 
 
@@ -66,19 +67,40 @@ const assign = async (req, res = response) => {
 
     try {
       
-     
 
-            const task = Task.findById(req.body.id);
+        const task = await Task.findById(req.body.task);
+        const user = await Task.findById(req.body.user);
+        const time = req.body.time;
+
 
             if(task){
+                //task.
+                if(User){
 
-                task.
+                    task.asignments.push({
+                        assignedTo: req.body.user,
+                        time: time
+                    });
 
-                res.status(201).json({
-                    status: true,
-                    message: 'Tarea asignada con éxito',
-                    task
-                })
+                    await task.save();
+
+
+                    res.status(201).json({
+                        status: true,
+                        message: 'Tarea asignada con éxito',
+                        task
+                    })
+    
+
+                }else{
+                    res.status(404).json({
+                        status: false,
+                        message: 'El usuario con el id ' + user.id + ' no existe',
+                        task
+                    })
+                }
+
+
             
             }else{
                 res.status(404).json({
@@ -113,10 +135,11 @@ const getAll = async (req, res = response) => {
 
     try {
     
-        console.log("TRY");
 
-        const [tareas, totalResults] = await Promise.all([
+        const [tasks, totalResults] = await Promise.all([
             Task.find()
+                .populate('asignments.assignedTo', 'name image')
+            
                 .skip((page - 1 )*20)
                 .limit(20),  
                 Task.countDocuments()
@@ -125,7 +148,7 @@ const getAll = async (req, res = response) => {
 
         res.status(200).json({
             status: true,
-            tareas,
+            tasks,
             totalResults
         })
 

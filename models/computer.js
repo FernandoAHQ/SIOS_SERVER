@@ -24,6 +24,21 @@ const ComputerSchema = Schema({
         type: String,
         default: "Active"
     },
+    
+    specs: {
+        processor: {
+            type: String
+        },
+        ram: {
+            type: String
+        },
+        storage: {
+            type: String
+        },
+        system: {
+            type: String
+        }
+    }
 
 });
 

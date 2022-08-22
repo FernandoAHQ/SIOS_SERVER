@@ -10,11 +10,12 @@ const create = async (req, res = response) => {
 
     var category = req.params.category;
 
+    console.log(req.body);
 
         switch(category){
             case 'computers':{
 
-                
+
                                     try {
                                         const {department} = req.body;
 
@@ -38,9 +39,7 @@ const create = async (req, res = response) => {
                                                 message: `Ya existe una computadora con el folio: ${ req.body.folio }.`,
                                             })
                                         }
-
                                             const newComputer = new Computer(req.body);
-                                            newComputer.encargado = depdb.user;
 
                                             await newComputer.save();
                                           

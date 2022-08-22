@@ -17,8 +17,8 @@ const getMenuFrontEnd = ( role = 'user_role' ) => {
 
     if ( role == 'ADMIN_ROLE' ) {
         return [
-        //    { titulo: 'Solicitudes', icono: 'fas fa-user-alt mr-2', url: 'solicitudes' },
-            { titulo: 'Periodos', icono: 'fas fa-user-alt mr-2', url: 'periodos' },
+            { titulo: 'Tareas', icono: 'fas fa-user-alt mr-2', url: 'tareas' },
+        //    { titulo: 'Periodos', icono: 'fas fa-user-alt mr-2', url: 'periodos' },
             { titulo: 'Servicios', icono: 'fas fa-user-alt mr-2', url: 'servicios' },
             { titulo: 'Bitacora', icono: 'fas fa-user-alt mr-2', url: 'bitacora' },
          //   { titulo: 'Ordenes',     icono: 'fas fa-newspaper mr-2', url: 'ordenes' },

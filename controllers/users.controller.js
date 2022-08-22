@@ -14,7 +14,7 @@ const Department = require('../models/department');
  * 
  */
 
-const getAllByRole = async(req, res = response ) => {
+ const getAllByRole = async(req, res = response ) => {
 
     const page = Number(req.query.page) || 1;
 
@@ -36,6 +36,48 @@ const getAllByRole = async(req, res = response ) => {
 
         const [users, totalResults] = await Promise.all([
             User.find({ role: role.toUpperCase() }).skip((page - 1 )*20).limit(20),            
+            User.countDocuments({ role: role.toUpperCase() })
+        ]);
+
+
+        res.status(200).json({
+            status: true,
+            users,
+            totalResults
+        })
+
+
+    } catch( error ) {
+        console.log(error);
+        res.status(500).json({
+            status: false,
+            message: 'Hable con el administrador'
+        })
+    }
+
+}
+
+const getAllByRoleOne = async(req, res = response ) => {
+
+
+    const { role } = req.params;
+
+    try {
+
+
+        const rolesValidos = ['ADMIN_ROLE', 'USER_ROLE', 'SITE_ROLE'];
+
+        if( rolesValidos.indexOf( role.toUpperCase() ) < 0 ){
+
+            return res.status(400).json({
+                status: false,
+                message: `El role ${ role } no es válido, los roles permitidos son ${rolesValidos.join(', ')}`
+            })
+    
+        }
+
+        const [users, totalResults] = await Promise.all([
+            User.find({ role: role.toUpperCase() }),            
             User.countDocuments({ role: role.toUpperCase() })
         ]);
 
@@ -211,6 +253,7 @@ const changeIsActive = async(req, res = response ) => {
 
 module.exports = {
     getAllByRole,
+    getAllByRoleOne,
     getUsersIsActive,
     update,
     getUsersWithoutDepartment,
